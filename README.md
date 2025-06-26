@@ -55,7 +55,7 @@ app/
 ### 1. Setup
 
 ```bash
-python scripts/setup.py
+uv pip install -r requirements.txt 
 ```
 
 ### 2. Start Weaviate
@@ -148,14 +148,19 @@ The system includes detailed, context-rich knowledge about the following ITSM to
 9. SysAid
 10. Microsoft Dynamics 365 for Customer Service
 
----
 
-## 🔐 License
+## 🔑 Authentication: HuggingFace Token
 
-MIT License – see `LICENSE` file for details.
+To use HuggingFace models (for embedding or generation), set your HuggingFace token in the environment variables:
 
----
+```bash
+export HUGGINGFACEHUB_API_TOKEN=your_hf_token_here
+```
 
-## 👥 Contributors
+Alternatively, update your `.env` file if you are using `python-dotenv`:
 
-Built with ❤️ by the Agentic-AI team.
+```env
+HUGGINGFACEHUB_API_TOKEN=your_hf_token_here
+```
+
+Make sure the token has the necessary access to download private or gated models if required.
