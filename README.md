@@ -1,119 +1,161 @@
-# Agentic-AI
-The AI agent now has comprehensive knowledge about all 10 ITSM tools from the Zenduty article and can provide detailed, accurate responses to user queries. The interface is intuitive and the system is ready for immediate use!
 
+# Agentic-AI: Enterprise-Grade ITSM RAG System
 
-# Complete Enterprise RAG Implementation with Weaviate + HuggingFace
-I've created a comprehensive, production-ready ITSM RAG system following FastAPI best practices with modern architecture:
-🏗️ Architecture Highlights
-Proper FastAPI Structure:
+**Agentic-AI** is a powerful, production-ready Retrieval-Augmented Generation (RAG) system tailored for IT Service Management (ITSM). It combines the latest in semantic search, real-time scraping, and local AI generation to deliver accurate, contextual responses based on the top 10 ITSM tools outlined in [Zenduty's 2025 ITSM report](https://zenduty.com/blog/top-itsm-tools/).
 
+---
+
+## 🔧 Architecture Overview
+
+```
 app/
 ├── main.py              # Application entry point
 ├── api/                 # API layer with proper routing
-├── core/               # Configuration and utilities
-├── db/                 # Database connections and models
-├── services/           # Business logic layer
-├── schemas/            # Pydantic data validation
-└── utils/              # Helper functions
-Technology Stack:
+├── core/                # Configuration and environment settings
+├── db/                  # Database connections and models
+├── services/            # Business logic layer
+├── schemas/             # Pydantic data validation
+└── utils/               # Helper utilities
+```
 
-Weaviate: High-performance vector database for semantic search
-HuggingFace Transformers: Local AI model for generation (no OpenAI dependency)
-FastAPI: Modern async web framework
-Docker Compose: Complete orchestration
+### 🛠 Technology Stack
+- **Weaviate**: High-performance vector database for semantic search
+- **HuggingFace Transformers**: Local AI model for generation (no OpenAI dependency)
+- **FastAPI**: Modern async web framework
+- **Docker Compose**: Container orchestration for deployment
 
-🚀 Key Innovations
-Advanced RAG Pipeline:
+---
 
-Real-time web scraping with retry logic
-Intelligent content chunking and processing
-Vector embeddings with sentence transformers
-Local HuggingFace model for response generation
-Sophisticated source attribution and confidence scoring
+## 🚀 Key Features
 
-Production Features:
+### ✅ Advanced RAG Pipeline
+- Real-time web scraping with retry logic
+- Intelligent content chunking and HTML-aware preprocessing
+- Sentence transformer embeddings for vector search
+- Local HuggingFace model for response generation
+- Source attribution and confidence scoring
 
-Comprehensive health monitoring
-Automatic data refresh mechanisms
-Proper error handling and logging
-Type-safe APIs with Pydantic validation
-Containerized deployment with Docker
+### ✅ Production-Ready Features
+- Health monitoring endpoints
+- Automatic data refresh & change detection
+- Comprehensive logging and error handling
+- Pydantic-based validation
+- Async-first design throughout
+- Dockerized for easy deployment
 
-Smart Architecture:
+### ✅ Smart Architecture
+- Dependency injection for clean service management
+- Modular, scalable service design
+- Environment-based configuration management
 
-Dependency injection for service management
-Async processing throughout the pipeline
-Modular services for easy maintenance
-Configuration management with environment variables
+---
 
-# Quick Start
-bash# 1. Setup
+## ⚙️ Quick Start
+
+### 1. Setup
+
+```bash
 python scripts/setup.py
+```
 
-# 2. Start Weaviate
+### 2. Start Weaviate
+
+```bash
 docker-compose up -d weaviate
+```
 
-# 3. Run application
+### 3. Run the Application
+
+```bash
 python -m app.main
+```
 
-# 4. Access at http://localhost:8000
-💡 Technical Features
-Weaviate Integration:
+### 4. Access the API
 
-Custom schema for ITSM documents
-Optimized vector search with filters
-Batch document processing
-Automatic schema management
+Visit: [http://localhost:8000](http://localhost:8000)
 
-HuggingFace Models:
+---
 
-Local model loading with caching
-GPU/CPU optimization
-Fallback model support
-Quantization for memory efficiency
+## 💡 Technical Highlights
 
-Smart Processing:
+### 🔍 Weaviate Integration
+- Custom ITSM schema definition
+- Optimized vector search with filters
+- Automatic schema creation and batching
 
-Intelligent content extraction from web pages
-Tool-specific information categorization
-Overlap-based text chunking
-Metadata preservation throughout pipeline
+### 🧠 HuggingFace Local Model
+- Efficient on-device inference (CPU/GPU)
+- Quantized model support
+- Caching and fallback handling
 
-🎯 Advanced Capabilities
-Real-time Knowledge Updates:
+### 📄 Smart Content Processing
+- Clean HTML extraction with `unstructured`
+- Title-aware and overlap-based chunking
+- Tool-specific metadata preservation
 
-Automatic web scraping of latest ITSM content
-Incremental document updates
-Change detection and refresh triggers
-Manual refresh endpoints
+---
 
-Enhanced User Experience:
+## 🎯 Advanced Capabilities
 
-Confidence scoring for responses
-Source attribution with certainty scores
-Processing time tracking
-Real-time system status indicators
+### 🔄 Real-Time Knowledge Refresh
+- Periodic scraping for updated ITSM content
+- Change detection and diff-based updates
+- Manual refresh endpoints
 
-Scalability & Performance:
+### 📈 User Experience & Monitoring
+- Confidence scoring per response
+- Source attribution with citation
+- Response time logging
+- Real-time system health endpoints
 
-Async operations throughout
-Efficient batch processing
-Connection pooling
-Resource optimization
+### 📊 Monitoring & Analytics
+- Application health and performance metrics
+- Structured, centralized logging
+- Error trace tracking
+- System resource monitoring and alerts
 
-📊 Monitoring & Analytics
+---
 
-Comprehensive health checks
-Performance metrics tracking
-Detailed logging with structured format
-Error tracking and recovery
-System resource monitoring
+## 📦 Deployment
 
-This implementation represents a enterprise-grade RAG system that's:
+This system is:
 
-Scalable: Can handle high concurrent loads
-Maintainable: Clean architecture with proper separation of concerns
-Extensible: Easy to add new features and models
-Production-Ready: Proper error handling, logging, and monitoring
+- ✅ **Scalable**: Handles high concurrency via async operations and connection pooling
+- ✅ **Maintainable**: Clean architecture and modular services
+- ✅ **Extensible**: Add new models, tools, or scrapers easily
+- ✅ **Production-Ready**: Error handling, metrics, monitoring, and CI/CD compatible
 
-The system automatically stays current with the latest ITSM information while providing accurate, contextual responses through advanced vector search and local AI generation.
+---
+
+## 📚 Domain Focus
+
+> This AI agent is exclusively focused on ITSM tools as documented in the Zenduty 2025 report. It will not respond to unrelated or out-of-domain queries.
+
+---
+
+## 🧠 Knowledge Base
+
+The system includes detailed, context-rich knowledge about the following ITSM tools:
+
+1. **Xurrent** (Top pick, AI-first platform)
+2. ServiceNow
+3. BMC Helix
+4. Freshservice
+5. Jira Service Management
+6. Ivanti Neurons
+7. SolarWinds
+8. ManageEngine
+9. SysAid
+10. Microsoft Dynamics 365 for Customer Service
+
+---
+
+## 🔐 License
+
+MIT License – see `LICENSE` file for details.
+
+---
+
+## 👥 Contributors
+
+Built with ❤️ by the Agentic-AI team.
