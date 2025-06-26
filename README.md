@@ -6,6 +6,7 @@ The AI agent now has comprehensive knowledge about all 10 ITSM tools from the Ze
 I've created a comprehensive, production-ready ITSM RAG system following FastAPI best practices with modern architecture:
 🏗️ Architecture Highlights
 Proper FastAPI Structure:
+
 app/
 ├── main.py              # Application entry point
 ├── api/                 # API layer with proper routing
