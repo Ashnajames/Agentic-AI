@@ -113,50 +113,64 @@ class RAGService:
             }
     
     async def refresh_knowledge_base(self, force_refresh: bool = False) -> Dict[str, Any]:
-        """Refresh the knowledge base with latest data"""
         start_time = time.time()
         
         try:
             logger.info("Starting knowledge base refresh...")
-            
-          
+            documents = []
             scraped_data = await self.scraper.scrape_itsm_content()
             
-            if not scraped_data:
-                raise Exception("Failed to scrape content from website")
+            if scraped_data:
+                documents = await self.processor.process_scraped_content(scraped_data)
+                texts = [doc['content'] for doc in documents]
             
-           
-            documents = await self.processor.process_scraped_content(scraped_data)
+            else:
+                logger.warning("Scraping failed. Falling back to local JSON.")
+                chunks = self.processor.chunk_json_from_file(self.processor.filepath)
+
+                # Flatten the nested list of chunks
+                flat_documents = [doc for chunk in chunks for doc in chunk]
+                for doc in flat_documents:
+                    doc['content'] = f"{doc['name']} {doc['version']}"
+                    doc["source"] = "fallback"
+                    doc["category"] = "module"
+
+
+                texts = [doc['content'] for doc in flat_documents]
+
+                embeddings = await embedding_service.encode_texts(texts)
+
+                # Attach vectors to each flat document
+                for doc, embedding in zip(flat_documents, embeddings):
+                    doc['vector'] = embedding
+
+                documents = flat_documents  # assign for downstream use
             
             if not documents:
-                raise Exception("No documents were processed from scraped content")
-            
-            
-            texts = [doc['content'] for doc in documents]
-            embeddings = await embedding_service.encode_texts(texts)
-            
-           
-            for doc, embedding in zip(documents, embeddings):
-                doc['vector'] = embedding
-            
-         
+                raise Exception("No documents were processed from scraped content or fallback.")
+
+            # Only embed again if we didn't do it during fallback
+            if 'vector' not in documents[0]:
+                embeddings = await embedding_service.encode_texts(texts)
+                for doc, embedding in zip(documents, embeddings):
+                    doc['vector'] = embedding
+
             if force_refresh:
                 await weaviate_client.delete_all_documents()
-            
-            
+
             await weaviate_client.add_documents(documents)
-            
+
             processing_time = time.time() - start_time
-            
+
             logger.info(f"Knowledge base refreshed successfully in {processing_time:.2f}s")
-            
+
             return {
                 'status': 'success',
                 'message': 'Knowledge base updated successfully',
                 'documents_processed': len(documents),
                 'processing_time': processing_time
             }
-            
+
         except Exception as e:
             logger.error(f"Error refreshing knowledge base: {e}")
             return {
@@ -165,7 +179,7 @@ class RAGService:
                 'documents_processed': 0,
                 'processing_time': time.time() - start_time
             }
-    
+
     async def get_health_status(self) -> Dict[str, Any]:
         """Get health status of all RAG components"""
         try:
