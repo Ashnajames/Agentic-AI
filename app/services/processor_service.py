@@ -3,6 +3,7 @@ from typing import List, Dict, Any
 from datetime import datetime
 from app.core.config import settings
 from app.core.logging import setup_logging
+import json
 
 
 from unstructured.partition.html import partition_html
@@ -28,6 +29,7 @@ class ProcessorService:
     def __init__(self):
         self.chunk_size = settings.CHUNK_SIZE
         self.chunk_overlap = settings.CHUNK_OVERLAP
+        self.filepath = settings.FILEPATH
 
     async def process_scraped_content(self, scraped_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         documents = []
@@ -241,3 +243,41 @@ Tools Covered:
 
     def _is_html(self, text: str) -> bool:
         return any(tag in text.lower() for tag in ['<html', '<div', '<p', '<section', '<article'])
+    
+    def chunk_json_from_file(self,file_path:str):
+        """
+        Reads a JSON file and yields data in chunks.
+        Assumes the JSON file contains a top-level array of objects.
+
+        Args:
+            file_path (str): The path to the JSON file.
+            chunk_size (int): The number of objects to include in each chunk.
+
+        Yields:
+            list: A list of JSON objects representing a chunk of data.
+        """
+        chunks = []
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+
+                # Safely extract the modules dictionary
+                modules = data.get("event", {}).get("modules", {})
+                if not isinstance(modules, dict):
+                    raise TypeError("Expected 'event.modules' to be a dictionary.")
+
+                # Convert modules dict to list of objects
+                module_list = [{"name": k, "version": v} for k, v in modules.items()]
+
+              
+                for i in range(0, len(module_list), self.chunk_size):
+                    chunks.append(module_list[i:i + self.chunk_size])
+
+            return chunks
+
+        except FileNotFoundError:
+            print(f"Error: File not found at {file_path}")
+        except json.JSONDecodeError:
+            print(f"Error: Invalid JSON format in {file_path}")
+        except TypeError as e:
+            print(f"Error: {e}")
