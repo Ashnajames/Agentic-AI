@@ -1,5 +1,5 @@
 
-# Agentic-AI: Enterprise-Grade ITSM RAG System
+#  Enterprise-Grade ITSM RAG System
 
 **Agentic-AI** is a powerful, production-ready Retrieval-Augmented Generation (RAG) system tailored for IT Service Management (ITSM). It combines the latest in semantic search, real-time scraping, and local AI generation to deliver accurate, contextual responses based on the top 10 ITSM tools outlined in [Zenduty's 2025 ITSM report](https://zenduty.com/blog/top-itsm-tools/).
 
